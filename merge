@@ -1,0 +1,56 @@
+#! /usr/bin/env python
+# Code by Dex7er
+# -*- coding: utf-8 -*-#
+import pysrt
+import os
+import sys
+
+def total_seconds(subrip_time):
+    return subrip_time.seconds + subrip_time.minutes * 60 + subrip_time.hours * 3600 + subrip_time.milliseconds / 1000
+
+def find_closest_subtitle_index(target_time, subtitles):
+    # Convert SubRipTime to total seconds
+    target_seconds = total_seconds(target_time)
+    # Find the index with the minimum absolute time difference
+    return min(range(len(subtitles)), key=lambda i: abs(total_seconds(subtitles[i].start) - target_seconds))
+
+def get_unique_output_path(base_path, extension):
+    i = 1
+    while os.path.exists(f"{base_path}.{i}.{extension}"):
+        i += 1
+    return f"{base_path}.{i}.{extension}"
+    
+def merge_srt_files(file1_path, file2_path, output_path):
+    srts1 = pysrt.open(file1_path, encoding='utf-8')
+    srts2 = pysrt.open(file2_path, encoding='utf-8')
+    unique_output_path = get_unique_output_path(output_path, "srt")    
+    with open(unique_output_path, 'w', encoding='utf-8') as merged_file:    
+        for i in range(len(srts1)):
+            # find srts2 in srts1[i].start
+            closest_index = find_closest_subtitle_index(srts1[i].start, srts2)
+      
+            print(f"Subtitle from srts1 at index {i} with start time {srts1[i].start}:")
+            print(srts1[i])
+            print(f"Closest subtitle from srts2 at index {closest_index} with start time {srts2[closest_index].start}:")
+            print(srts2[closest_index])
+            print("--------")    
+            if srts2[closest_index].end <= srts1[i].start :
+                merged_file.write(srts2[closest_index].__str__() + '\n')
+            elif srts2[closest_index].start >= srts1[i].end:
+                merged_file.write(srts1[i].__str__() + '\n')
+            else:
+                srts1[i].text += '\n' + srts2[closest_index].text
+                merged_file.write(srts1[i].__str__() + '\n')
+    os.startfile(unique_output_path)
+
+if __name__ == "__main__":
+    # Check if the correct number of arguments is provided
+    if len(sys.argv) != 4:
+        print("Usage: python script.py basefile_path.srt transfile_path.srt outputName_path")
+        sys.exit(1)
+
+    # Get file paths from command-line arguments
+    file1_path = sys.argv[1]
+    file2_path = sys.argv[2]
+    output_path = sys.argv[3]
+    merge_srt_files(file1_path, file2_path, output_path)
