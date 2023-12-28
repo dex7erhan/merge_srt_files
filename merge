@@ -31,9 +31,9 @@ def merge_srt_files(file1_path, file2_path, output_path):
             try :
                 closest_index = find_closest_subtitle_index(srts2[i].start, srts1)
                 # 
-                print(f"Subtitle from srts1 at index {i} with start time {srts2[i].start}:")
+                print(f"Subtitle from srts2 at index {i} with start time {srts2[i].start}:")
                 print(srts2[i])
-                print(f"Closest subtitle from srts2 at index {closest_index} with start time {srts1[closest_index].start}:")
+                print(f"Closest subtitle from srts1 at index {closest_index} with start time {srts1[closest_index].start}:")
                 print(srts1[closest_index])
                 print("--------")    
                 if srts1[closest_index].end <= srts2[i].start or srts1[closest_index].start >= srts2[i].end:
