@@ -141,7 +141,8 @@ def merge_srt_files(file1_path, file2_path):
 if __name__ == "__main__":
     # Check if the correct number of arguments is provided
     if len(sys.argv) != 3:
-        print("Usage: python script.py basefile_path.srt transfile_path.srt outputName_path")
+        print("Usage: python merge.py basefile_path.srt transfile_path.srt")
+        print("Usage: Merged srt will be found next to the basefile_path.srt")
         sys.exit(1)       
     # Get file paths from command-line arguments    
     file1_path = sys.argv[1]
