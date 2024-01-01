@@ -26,7 +26,8 @@ def format_subtitles(file_path):
         print(f"formatted file {file_path}...")    
     srts1 = pysrt.open(file_path, encoding='utf-8')
     for i in range(len(srts1)):   
-        srts1[i].text = srts1[i].text.replace('\n', ' ').replace('\r', ' ').replace('-', '- ').replace('-  ', '- ').replace('- - >', '-->')       
+        #([A-Za-z]+)- ([A-Za-z]+)
+        srts1[i].text = srts1[i].text.replace('\n', ' ').replace('\r', ' ').replace('-', '- ').replace('-  ', '- ')  
     srts1.sort(key=lambda x: x.start)
     srts1.save(file_path, encoding='utf-8')
     
