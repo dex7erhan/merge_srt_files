@@ -27,8 +27,14 @@ def format_subtitles(file_path):
     # Write the formatted subtitles back to the same file
     with open(file_path, 'w', encoding='utf-8') as file:
         file.writelines(formatted_subtitles)
-        print(f"formatted file {file_path}...")        
+        print(f"formatted file {file_path}...")       
 
+    srts1 = pysrt.open(file_path, encoding='utf-8')
+
+    for i in range(len(srts1)):   
+        srts1[i].text = srts1[i].text.replace('\n', ' ').replace('\r', ' ').replace('-', '- ').replace('-  ', '- ').replace('- - >', '-->')        
+    srts1.save(file_path, encoding='utf-8')
+    
 def convert_to_utf8_auto(file1_path):
     # Create a backup of the original file
     backup_directory = os.path.join(os.path.dirname(file1_path))
@@ -97,13 +103,13 @@ def get_unique_output_path(base_path, extension):
     return f"{base_path}.{i}.{extension}"
     
 def merge_srt_files(file1_path, file2_path):
-    converted_file_path, backup_path = convert_to_utf8_auto(file1_path)
-    converted_file_path, backup_path = convert_to_utf8_auto(file2_path)
-    format_subtitles(file1_path)   
-    format_subtitles(file2_path) 
-    srts1 = pysrt.open(file1_path, encoding='utf-8')
-    srts2 = pysrt.open(file2_path, encoding='utf-8')
-    
+    converted_file_path1, backup_path1 = convert_to_utf8_auto(file1_path)
+    converted_file_path2, backup_path2 = convert_to_utf8_auto(file2_path)
+    format_subtitles(converted_file_path1)   
+    format_subtitles(converted_file_path2) 
+    srts1 = pysrt.open(converted_file_path1, encoding='utf-8')
+    srts2 = pysrt.open(converted_file_path2, encoding='utf-8')
+
     directory, filename_with_extension = os.path.split(file1_path)
     filename, extension = os.path.splitext(filename_with_extension)
     # print("Directory:", directory)
@@ -111,7 +117,7 @@ def merge_srt_files(file1_path, file2_path):
     # print("Extension:", extension)
     output_filename = f"{filename}"
     output_path = os.path.join(os.path.dirname(file1_path), output_filename)
-    unique_output_path = get_unique_output_path(output_path, "Dex7er.EN.CN.srt")    
+    unique_output_path = get_unique_output_path(output_path, ".EN.CN.srt")    
     
     with open(unique_output_path, 'w', encoding='utf-8') as merged_file:    
         for i in range(len(srts2)):
@@ -121,8 +127,10 @@ def merge_srt_files(file1_path, file2_path):
 
                 print("--------")    
                 print(f"Subtitle srts1 {i} start:{srts2[i].start}；Closest srts2 {closest_index} start: {srts1[closest_index].start}")
+
                 print(srts1[closest_index].text)
                 print(srts2[i].text)
+ 
  
                 if srts1[closest_index].end <= srts2[i].start or srts1[closest_index].start >= srts2[i].end:
                     # merged_file.write(srts2[closest_index].__str__() + '\n')
@@ -141,8 +149,7 @@ def merge_srt_files(file1_path, file2_path):
 if __name__ == "__main__":
     # Check if the correct number of arguments is provided
     if len(sys.argv) != 3:
-        print("Usage: python merge.py basefile_path.srt transfile_path.srt")
-        print("Usage: Merged srt will be found next to the basefile_path.srt")
+        print("Usage: python script.py basefile_path.srt transfile_path.srt outputName_path")
         sys.exit(1)       
     # Get file paths from command-line arguments    
     file1_path = sys.argv[1]
