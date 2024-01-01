@@ -10,39 +10,32 @@ import shutil
 
 def format_subtitles(file_path):
     formatted_subtitles = []
-
     with open(file_path, 'r', encoding='utf-8') as file:
         for line in file:
             # Skip blank lines
             if not line.strip():
                 continue
-
             # Check if the previous line ended with a newline character
             if formatted_subtitles and formatted_subtitles[-1].endswith('\n') and line.strip().isdigit():
                 # Add a newline character before the digit
                 line = '\n' + line
-
             formatted_subtitles.append(line)
-
     # Write the formatted subtitles back to the same file
     with open(file_path, 'w', encoding='utf-8') as file:
         file.writelines(formatted_subtitles)
-        print(f"formatted file {file_path}...")       
-
+        print(f"formatted file {file_path}...")    
     srts1 = pysrt.open(file_path, encoding='utf-8')
-
     for i in range(len(srts1)):   
-        srts1[i].text = srts1[i].text.replace('\n', ' ').replace('\r', ' ').replace('-', '- ').replace('-  ', '- ').replace('- - >', '-->')        
+        srts1[i].text = srts1[i].text.replace('\n', ' ').replace('\r', ' ').replace('-', '- ').replace('-  ', '- ').replace('- - >', '-->')       
+    srts1.sort(key=lambda x: x.start)
     srts1.save(file_path, encoding='utf-8')
     
 def convert_to_utf8_auto(file1_path):
     # Create a backup of the original file
     backup_directory = os.path.join(os.path.dirname(file1_path))
-    os.makedirs(backup_directory, exist_ok=True)
-    
+    os.makedirs(backup_directory, exist_ok=True)    
     backup_filename = f"backup.{os.path.basename(file1_path)}"
     backup_path = os.path.join(backup_directory, backup_filename)
-
     if not os.path.exists(backup_path):
         shutil.copy(file1_path, backup_path)
         print("Copy filepath to backup...")     
@@ -59,27 +52,20 @@ def convert_to_utf8_auto(file1_path):
                 if detector.done:
                     break
             detector.close()
-
         source_encoding = detector.result['encoding']
-
         if source_encoding is None:
-            raise ValueError("Unable to detect source encoding.")
-            
+            raise ValueError("Unable to detect source encoding.")            
         print(f"{os.path.basename(file1_path)} encoding is: {source_encoding}...")     
         # Create the output file path with the source encoding information
         # output_filename = f"utf8_{os.path.basename(file1_path)}"
         # output_path = os.path.join(os.path.dirname(file1_path), output_filename)
         output_path = file1_path
-
         # Convert to UTF-8
         with open(file1_path, 'r', encoding=source_encoding) as source_file:
             content = source_file.read()
-
         with open(output_path, 'w', encoding='utf-8') as utf8_file:
             utf8_file.write(content)
-
         return output_path, backup_path
-
     except chardet.UniversalDetectorError as e:
         print(f"Error during encoding detection: {e}")
         return None, backup_path
@@ -109,7 +95,6 @@ def merge_srt_files(file1_path, file2_path):
     format_subtitles(converted_file_path2) 
     srts1 = pysrt.open(converted_file_path1, encoding='utf-8')
     srts2 = pysrt.open(converted_file_path2, encoding='utf-8')
-
     directory, filename_with_extension = os.path.split(file1_path)
     filename, extension = os.path.splitext(filename_with_extension)
     # print("Directory:", directory)
@@ -117,21 +102,15 @@ def merge_srt_files(file1_path, file2_path):
     # print("Extension:", extension)
     output_filename = f"{filename}"
     output_path = os.path.join(os.path.dirname(file1_path), output_filename)
-    unique_output_path = get_unique_output_path(output_path, ".EN.CN.srt")    
-    
+    unique_output_path = get_unique_output_path(output_path, ".EN.CN.srt")       
     with open(unique_output_path, 'w', encoding='utf-8') as merged_file:    
         for i in range(len(srts2)):
-
             try :
                 closest_index = find_closest_subtitle_index(srts2[i].start, srts1)
-
                 print("--------")    
                 print(f"Subtitle srts1 {i} start:{srts2[i].start}；Closest srts2 {closest_index} start: {srts1[closest_index].start}")
-
                 print(srts1[closest_index].text)
-                print(srts2[i].text)
- 
- 
+                print(srts2[i].text)  
                 if srts1[closest_index].end <= srts2[i].start or srts1[closest_index].start >= srts2[i].end:
                     # merged_file.write(srts2[closest_index].__str__() + '\n')
                     srts1.append(srts2[i])
