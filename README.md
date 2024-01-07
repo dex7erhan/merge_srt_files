@@ -3,7 +3,9 @@
 Merge 2 srt files into 1 srt，for making bilingual subtitle file，by the closest timestamp, e.g.
 
 0x1,srt1 is：
+
 .....
+
 1
 00:01:01,774 --> 00:01:04,193
 <i>Why are the English still with us?</i>
@@ -22,7 +24,9 @@ Merge 2 srt files into 1 srt，for making bilingual subtitle file，by the close
 ......
 
 0x2,srt2 is：
+
 ......
+
 2
 00:01:01,774 --> 00:01:03,859
 ‎英国人为什么还在我们这里？
@@ -49,7 +53,9 @@ Merge 2 srt files into 1 srt，for making bilingual subtitle file，by the close
 ......
 
 0x3,After merge, you'll get a srt like:
+
 ......
+
 2
 00:01:01,774 --> 00:01:04,193
 <i>Why are the English still with us?</i>
