@@ -40,10 +40,6 @@ Merge 2 srt files into 1 srt，for making bilingual subtitle file，by the close
 00:01:07,863 --> 00:01:09,865
 ‎英国人为什么还在爱尔兰持续出现？
 
-5
-00:01:09,949 --> 00:01:11,075
-‎（死亡女王）
-
 6
 00:01:11,158 --> 00:01:13,410
 ‎人们做了那么多牺牲
@@ -72,10 +68,6 @@ Merge 2 srt files into 1 srt，for making bilingual subtitle file，by the close
 00:01:07,113 --> 00:01:09,865
 <i>does the British presence in Ireland still endure?</i>
 ‎英国人为什么还在爱尔兰持续出现？
-
-5
-00:01:09,949 --> 00:01:13,410
-{\an8}‎（死亡女王）
 
 6
 00:01:09,949 --> 00:01:13,410
