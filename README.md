@@ -44,9 +44,6 @@ Merge 2 srt files into 1 srt，for making bilingual subtitle file，by the close
 00:01:11,158 --> 00:01:13,410
 ‎人们做了那么多牺牲
 
-7
-00:01:14,370 --> 00:01:16,080
-‎我们那么多的兄弟姐妹
 
 ......
 
