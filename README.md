@@ -21,6 +21,7 @@ Merge 2 srt files into 1 srt，for making bilingual subtitle file，by the close
 4
 00:01:09,949 --> 00:01:13,410
 <i>So many sacrifices have been made.</i>
+
 ......
 
 0x2,srt2 is：
@@ -50,6 +51,7 @@ Merge 2 srt files into 1 srt，for making bilingual subtitle file，by the close
 7
 00:01:14,370 --> 00:01:16,080
 ‎我们那么多的兄弟姐妹
+
 ......
 
 0x3,After merge, you'll get a srt like:
@@ -79,6 +81,7 @@ Merge 2 srt files into 1 srt，for making bilingual subtitle file，by the close
 00:01:09,949 --> 00:01:13,410
 <i>So many sacrifices have been made.</i>
 ‎人们做了那么多牺牲
+
 ......
 
 
